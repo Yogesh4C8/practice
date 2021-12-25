@@ -9,17 +9,17 @@ import './App.css';
 // import UseStateExample2 from './UseStateExample2';
 // import PersonList from './PersonList';
 // import Counter from './Counter';
-import { VscArrowRight } from "react-icons/vsc"
-import {AiOutlineMenu} from "react-icons/ai"
+// import { VscArrowRight } from "react-icons/vsc"
+// import {AiOutlineMenu} from "react-icons/ai"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Button,Dropdown,DropdownButton} from 'react-bootstrap'
+// import {Button,Dropdown,DropdownButton} from 'react-bootstrap'
 import AddUserForm from './AddUserForm';
 import Users from './Users';
 import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
 
 function App() {
-  const [users, setUsers] = useState([{"userId":"11282","name":"yogesh","userCode":"yogi"},{"userId":"1122","name":"ravi","userCode":"rav122"},{"userId":"11283","name":"ganesh","userCode":"gh"}]);
+  const [users, setUsers] = useState([{"userId":"11282","name":"YOGESH","userCode":"yogi"},{"userId":"1122","name":"ravi","userCode":"rav122"},{"userId":"11283","name":"ganesh","userCode":"gh"}]);
   return (
     // <AddUserForm />
     <Router>

@@ -1,14 +1,15 @@
 import React,{useState,useEffect} from 'react'
-import AddUserForm from './AddUserForm';
+
 import {Table, Button,Form,Row,Col,InputGroup,FormControl} from 'react-bootstrap'
-import {Link, useHref} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import {FiSearch} from 'react-icons/fi'
 function Users(props) {
-    console.log(props)
+    // console.log(props)
     const {users,setUsers} = props
-    console.log(">>>>",users)
+    const fetchedUsers = users
+    // console.log(">>>>",users)
     const [searchUser, setSearchUser] = useState("");
-    const [searchUserCode, setSearchUserCode] = useState("");
+    const [isFilterCompleted, setIsFilterCompleted] = useState(false);
     // const deleteUserHandler = (key) => {
     //     const newusers=[...users];
     //     newusers.splice(key,1)
@@ -16,33 +17,64 @@ function Users(props) {
     //     setUsers(newusers)
     //     console.log(newusers)
     // }
+
+
+
     // useEffect(() => {
         const searchUserHandler = (e) => {
-            setSearchUserCode("")
             setSearchUser(e.target.value)
             setUsers(users)
         }
-        const searchUserCodeHandler = (e) => {
-            setSearchUser("")
-            setSearchUserCode(e.target.value)
-            setUsers(users)
-        }
+
         const searchFilter = () => {
-            const searchedUser = users.filter(user => {
-                return user.name === searchUser
+              const searchedUser = users.filter(user => {
+                return user.userId === searchUser || user.name.toLowerCase() === searchUser.toLowerCase() || user.userCode.toLowerCase() === searchUser.toLowerCase()
             })
-            
             setUsers(searchedUser)
+            console.log("searchedUser -------",searchedUser)
+            console.log("fetched users-------",fetchedUsers)
+            setIsFilterCompleted(true)
         }
-        const searchFilterByCode = () => {
-            const searchedUserCode = users.filter(user => {
-                return user.userCode === searchUserCode
-            })
-           
-            setUsers(searchedUserCode)
+        const enterHandler = (event) => {
+            // event.preventDefault();
+            if (event.key === "Enter") {
+                event.preventDefault();
+                searchFilter()
+            }
         }
     // }, [users,searchUser,searchUserCode]);
+
+
+    
+//    useEffect(() => {
+//     const searchUserHandler = (e) => {
+//             setSearchUser(e.target.value)
+//             setUsers(users)
+//         }
+//         const searchFilter = () => {
+//                 // setSearchUser(searchUser.toLowerCase())
+//                 // console.log("ttttttttt",searchUser.toLowerCase())
+//                   const searchedUser = users.filter(user => {
+//                     return user.userId === searchUser || user.name.toLowerCase() === searchUser.toLowerCase() || user.userCode.toLowerCase() === searchUser.toLowerCase()
+//                 })
+//                 setUsers(searchedUser)
+//             }
+            // const enterHandler = (event) => {
+            //     event.preventDefault();
+            //     if (event.key === "Enter") {
+            //         event.preventDefault();
+            //         searchFilter()
+            //     }
+            // }
+//        window.addEventListener("change",searchUserHandler)
+//        window.addEventListener("click",searchFilter)
+//        window.addEventListener("keydown",enterHandler)
    
+//        return() => {
+//         window.removeEventListener(onChange,searchUserHandler)
+//         window.removeEventListener(onClick,searchFilter)
+//        }
+//    }, []);
     //here
     const deleteUserHandler = (key) => {
         const newUsers = users.filter(user => {
@@ -59,20 +91,11 @@ function Users(props) {
                    <Col>
                    <Col sm={3} className="my-1">
                         <Form.Label htmlFor="inlineFormInputGroupUsername" visuallyHidden >
-                            Search User by Name
+                            Search User
                         </Form.Label>
-                        <InputGroup >
-                            <FormControl id="inlineFormInputGroupUsername" placeholder="Search User by Name" value={searchUser} onChange={searchUserHandler} autocomplete='off'/>
-                            <InputGroup.Text onClick={searchFilter}><FiSearch /></InputGroup.Text>
-                        </InputGroup>
-                    </Col>
-                    <Col sm={3} className="my-1">
-                        <Form.Label htmlFor="inlineFormInputGroupUsername" visuallyHidden >
-                            Search User by User Code
-                        </Form.Label>
-                        <InputGroup >
-                            <FormControl id="inlineFormInputGroupUsername" placeholder="Search User by User Code" value={searchUserCode} onChange={searchUserCodeHandler} autocomplete='off'/>
-                            <InputGroup.Text onClick={searchFilterByCode}><FiSearch /></InputGroup.Text>
+                        <InputGroup onKeyPress={enterHandler}>
+                            <FormControl id="inlineFormInputGroupUsername" placeholder="Search User" value={searchUser} onChange={searchUserHandler}  autoComplete='off'/>
+                            <InputGroup.Text onClick={searchFilter}   id='searchBtn'><FiSearch /></InputGroup.Text>
                         </InputGroup>
                     </Col>
                    </Col>
@@ -93,7 +116,8 @@ function Users(props) {
                     </tr>
                 </thead>
                 <tbody>
-                     {users.map((user,i) => (
+                    {isFilterCompleted} ?
+                        {users.map((user,i) => (
                             <tr key={user.userId}>
                                 {/* {console.log(user)} */}
                                 <td>{user.userId}</td>
@@ -102,7 +126,20 @@ function Users(props) {
                                 {/* <td><Button variant="danger" onClick={() => deleteUserHandler(i)}>Delete</Button></td> */}
                                 <td><Button variant="danger" onClick={() => deleteUserHandler(user.userId)}>Delete</Button></td>
                             </tr>
-                     ))}
+                        ))}
+                     :
+                        {fetchedUsers.map((user,i) => (
+                            <tr key={user.userId}>
+                                {/* {console.log(user)} */}
+                                <td>{user.userId}</td>
+                                <td>{user.name}</td>
+                                <td>{user.userCode}</td>
+                                {/* <td><Button variant="danger" onClick={() => deleteUserHandler(i)}>Delete</Button></td> */}
+                                <td><Button variant="danger" onClick={() => deleteUserHandler(user.userId)}>Delete</Button></td>
+                            </tr>
+                        ))}
+                    
+                     
                 </tbody>
       </Table>
         </div>
